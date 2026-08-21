@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITソリューション開発 | 先端テクノロジーで日本の明日に確かな価値を提供</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #5BA0A0;
+            --accent: #FF8C42;
+        }
+        .text-primary { color: var(--primary); }
+        .bg-primary { background-color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .bg-accent { background-color: var(--accent); }
+        .border-primary { border-color: var(--primary); }
+        .hover-primary:hover { color: var(--primary); }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white shadow-md z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="font-bold text-2xl text-primary">3SSS Solutions</div>
+            <ul class="hidden md:flex gap-8 text-gray-700">
+                <li><a href="#problems" class="hover-primary transition">課題</a></li>
+                <li><a href="#features" class="hover-primary transition">特長</a></li>
+                <li><a href="#voice" class="hover-primary transition">お客様の声</a></li>
+                <li><a href="#faq" class="hover-primary transition">FAQ</a></li>
+                <li><a href="#contact" class="hover-primary transition">お問い合わせ</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 1. FV (ファーストビュー) -->
+    <section class="pt-20 pb-20 bg-gradient-to-b from-blue-50 to-white min-h-screen flex items-center">
+        <div class="max-w-6xl mx-auto px-4 w-full">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                        先端テクノロジーで<br class="hidden md:block">日本の明日に<br class="hidden md:block"><span class="text-primary">確かな価値</span>を提供する
+                    </h1>
+                    <p class="text-lg text-gray-600 mb-8">
+                        確かな技術と豊富な経験でITソリューションをワンストップで提供します。
+                    </p>
+                    <button class="bg-accent hover:opacity-90 text-white font-bold py-4 px-8 rounded-lg transition text-lg">
+                        <i class="fas fa-envelope mr-2"></i>お問い合わせ
+                    </button>
+                </div>
+                <div>
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=500&fit=crop" alt="Technology Solution" class="rounded-lg shadow-lg">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Problems (ターゲットの悩み・課題) -->
+    <section id="problems" class="py-20 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-gray-900 mb-4">
+                <span class="text-primary">こんなお悩み</span>ありませんか？
+            </h2>
+            <p class="text-center text-gray-600 mb-16 text-lg">
+                多くの企業が抱える課題を解決するのが私たちの役割です
+            </p>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Problem 1 -->
+                <div class="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition">
+                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-server text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">システム刷新が分からない</h3>
+                    <p class="text-gray-600">
+                        自社のシステムが古くなってきたが刷新の仕方がわからない。リスクなく最新技術へ移行したい
+                    </p>
+                </div>
+
+                <!-- Problem 2 -->
+                <div class="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition">
+                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-book text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">属人化されたシステム</h3>
+                    <p class="text-gray-600">
+                        保守を担ってきた社員が退職するのでマニュアル化をしたい。運用の継続性を確保したい
+                    </p>
+                </div>
+
+                <!-- Problem 3 -->
+                <div class="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition">
+                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-check-circle text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">システム検証の不安</h3>
+                    <p class="text-gray-600">
+                        開発したシステムの検証をしたい。品質保証とリリース後の安心を得たい
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Features (選ばれる理由・特長) -->
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-gray-900 mb-4">
+                <span class="text-primary">選ばれる3つの理由</span>
+            </h2>
+            <p class="text-center text-gray-600 mb-16 text-lg">
+                私たちが選ばれ続ける理由
+            </p>
+
+            <div class="grid md:grid-cols-3 gap-12">
+                <!-- Feature 1 -->
+                <div class="text-center">
+                    <div class="mb-6">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&h=300&fit=crop" alt="豊富な実績" class="w-full rounded-lg shadow-md">
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                        <span class="text-primary">15年以上の実績</span>
+                    </h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        300社以上の企業様とのプロジェクト経験。Web系から業務系まで幅広い開発実績があります。信頼と安定がすべてのプロジェクトの��[...]
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="text-center">
+                    <div class="mb-6">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&h=300&fit=crop" alt="最新技術" class="w-full rounded-lg shadow-md">
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                        <span class="text-primary">最新技術と最適化</span>
+                    </h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        AI・クラウド・IoTなど最先端技術の導入。常に業界トレンドを取り入れ、あなたのビジネスに最適なソリューションを提案します。
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="text-center">
+                    <div class="mb-6">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&h=300&fit=crop" alt="ワンストップ" class="w-full rounded-lg shadow-md">
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                        <span class="text-primary">ワンストップ支援</span>
+                    </h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        企画から運用まで一貫サポート。複数の外部業者を調整する手間が不要。責任を持ってプロジェクト完遂までお付き添いします。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Voice (お客様の声 / 実績) -->
+    <section id="voice" class="py-20 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-gray-900 mb-4">
+                <span class="text-primary">お客様の声</span>
+            </h2>
+            <p class="text-center text-gray-600 mb-16 text-lg">
+                実際のプロジェクトでのお客様の反応
+            </p>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Voice 1 -->
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <div class="flex items-center mb-6">
+                        <div class="flex text-accent">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-6">
+                        「老朽化したシステムの刷新で相談しました。丁寧なヒアリングから導入後のサポートまで本当に頼りになります。導入後の業務��[...]
+                    </p>
+                    <div class="border-t border-gray-200 pt-4">
+                        <p class="font-bold text-gray-900">A社 経営企画部長</p>
+                        <p class="text-sm text-gray-600">従業員150名 / 製造業</p>
+                    </div>
+                </div>
+
+                <!-- Voice 2 -->
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <div class="flex items-center mb-6">
+                        <div class="flex text-accent">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-6">
+                        「エンジニア退職による知識属人化が心配でした。マニュアル化と引継ぎ研修も合わせて実施してくれて、安心して次のステップ��[...]
+                    </p>
+                    <div class="border-t border-gray-200 pt-4">
+                        <p class="font-bold text-gray-900">B社 システム部長</p>
+                        <p class="text-sm text-gray-600">従業員80名 / 金融業</p>
+                    </div>
+                </div>
+
+                <!-- Voice 3 -->
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <div class="flex items-center mb-6">
+                        <div class="flex text-accent">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-6">
+                        「新規開発したシステムの品質検証をお願いしました。細かなバグ指摘から改善提案まで、プロフェッショナルな対応に満足です��[...]
+                    </p>
+                    <div class="border-t border-gray-200 pt-4">
+                        <p class="font-bold text-gray-900">C社 開発責任者</p>
+                        <p class="text-sm text-gray-600">従業員200名 / 商社</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. FAQ (よくある質問) -->
+    <section id="faq" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-gray-900 mb-4">
+                <span class="text-primary">よくある質問</span>
+            </h2>
+            <p class="text-center text-gray-600 mb-16 text-lg">
+                お客様からよく寄せられるご質問
+            </p>
+
+            <div class="space-y-4">
+                <!-- FAQ Item 1 -->
+                <div class="border border-gray-300 rounded-lg overflow-hidden">
+                    <button class="faq-toggle w-full px-6 py-4 bg-white hover:bg-gray-50 flex justify-between items-center transition" onclick="toggleFAQ(this)">
+                        <span class="font-bold text-lg text-gray-900 text-left">Q. 小規模企業でも依頼できますか？</span>
+                        <i class="fas fa-chevron-down text-primary"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 py-4 bg-gray-50 border-t border-gray-300">
+                        <p class="text-gray-700">
+                            もちろんです。むしろ小規模企業こそ、限られたリソースを最大限に活用することが重要です。貴社のご予算やニーズに合わせ�[...]
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="border border-gray-300 rounded-lg overflow-hidden">
+                    <button class="faq-toggle w-full px-6 py-4 bg-white hover:bg-gray-50 flex justify-between items-center transition" onclick="toggleFAQ(this)">
+                        <span class="font-bold text-lg text-gray-900 text-left">Q. 導入期間はどのくらい必要ですか？</span>
+                        <i class="fas fa-chevron-down text-primary"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 py-4 bg-gray-50 border-t border-gray-300">
+                        <p class="text-gray-700">
+                            プロジェクトの規模によって異なります。小規模なシステムであれば1〜3ヶ月、大型プロジェクトでは6〜12ヶ月が目安です。詳��[...]
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="border border-gray-300 rounded-lg overflow-hidden">
+                    <button class="faq-toggle w-full px-6 py-4 bg-white hover:bg-gray-50 flex justify-between items-center transition" onclick="toggleFAQ(this)">
+                        <span class="font-bold text-lg text-gray-900 text-left">Q. 導入後のサポートはありますか？</span>
+                        <i class="fas fa-chevron-down text-primary"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 py-4 bg-gray-50 border-t border-gray-300">
+                        <p class="text-gray-700">
+                            はい。導入後も運用サポート、保守、バージョンアップなど様々なプランをご用意しています。長期的なパートナーとして、貴�[...]
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Footer & CTA -->
+    <section id="contact" class="py-20 bg-gradient-to-r from-primary to-blue-500 text-white">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                あなたのビジネスの<br class="hidden md:block">次のステップを<br class="hidden md:block"><span class="text-accent">一緒に創りましょう</span>
+            </h2>
+            <p class="text-xl mb-10 opacity-90">
+                初回相談は無料です。まずはお気軽にお問い合わせください
+            </p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <button class="bg-accent hover:opacity-90 text-white font-bold py-4 px-12 rounded-lg transition text-lg">
+                    <i class="fas fa-envelope mr-2"></i>お問い合わせ
+                </button>
+                <button class="bg-white hover:bg-gray-100 text-primary font-bold py-4 px-12 rounded-lg transition text-lg">
+                    <i class="fas fa-download mr-2"></i>資料ダウンロード
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h3 class="text-white font-bold mb-4">About</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition">会社概要</a></li>
+                        <li><a href="#" class="hover:text-white transition">採用情報</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold mb-4">Service</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition">システム開発</a></li>
+                        <li><a href="#" class="hover:text-white transition">品質検証</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold mb-4">Support</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition">お問い合わせ</a></li>
+                        <li><a href="#" class="hover:text-white transition">お知らせ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold mb-4">Follow</h3>
+                    <div class="flex gap-4">
+                        <a href="#" class="hover:text-primary transition"><i class="fab fa-twitter text-lg"></i></a>
+                        <a href="#" class="hover:text-primary transition"><i class="fab fa-facebook text-lg"></i></a>
+                        <a href="#" class="hover:text-primary transition"><i class="fab fa-linkedin text-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center">
+                <p>&copy; 2024 3SSS Solutions. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFAQ(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('i');
+            
+            content.classList.toggle('hidden');
+            icon.style.transform = content.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+            icon.style.transition = 'transform 0.3s ease';
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
