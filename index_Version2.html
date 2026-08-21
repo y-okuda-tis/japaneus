@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>オセロ（リバーシ） - 単一ファイル版</title>
+  <style>
+    :root{
+      --bg:#0f1724; --card:#071228; --black:#0b0b0b; --white:#f4f4f4; --accent:#06b6d4; --muted:#94a3b8;
+    }
+    *{box-sizing:border-box;font-family: "Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,Segoe UI,Roboto, Arial;}
+    body{margin:0;min-height:100vh;background:linear-gradient(180deg,var(--bg),#071122);color:#e6eef6;display:flex;align-items:center;justify-content:center;padding:20px;}
+    .wrap{width:100%;max-width:960px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);border-radius:12px;padding:18px;display:grid;grid-template-columns:1fr 320px;gap:18px;}
+    header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+    h1{font-size:18px;margin:0}
+    .board-area{background:rgba(255,255,255,0.01);padding:12px;border-radius:8px}
+    .board{width:min(640px,92vw);aspect-ratio:1;display:grid;grid-template-columns:repeat(8,1fr);gap:4px;padding:6px;background:#0b2b18;border-radius:8px;border:4px solid rgba(0,0,0,0.2)}
+    .cell{background:linear-gradient(180deg,#0f3b20,#08361b);position:relative;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none}
+    .cell:hover{outline:2px solid rgba(255,255,255,0.03)}
+    .disc{width:78%;height:78%;border-radius:50%;box-shadow:inset 0 -6px 12px rgba(0,0,0,0.4)}
+    .disc.black{background:radial-gradient(circle at 30% 30%,#666,#000)}
+    .disc.white{background:radial-gradient(circle at 30% 30%,#fff,#ddd);border:1px solid rgba(0,0,0,0.06)}
+    .hint{width:22%;height:22%;border-radius:50%;background:rgba(255,255,255,0.9);opacity:0.9}
+    .side{background:rgba(255,255,255,0.01);padding:12px;border-radius:8px;display:flex;flex-direction:column;gap:12px;height:fit-content}
+    .status{display:flex;gap:8px;align-items:center;justify-content:space-between}
+    .player{display:flex;gap:8px;align-items:center}
+    .player .icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700}
+    .icon.black{background:linear-gradient(#333,#000);color:#fff}
+    .icon.white{background:linear-gradient(#fff,#ddd);color:#000}
+    .muted{color:var(--muted);font-size:13px}
+    .controls{display:flex;flex-direction:column;gap:8px}
+    .controls button{padding:8px 10px;border-radius:8px;border:0;background:linear-gradient(180deg,#07202a,#0b1220);color:var(--accent);cursor:pointer}
+    .controls button:disabled{opacity:.5;cursor:not-allowed}
+    .log{font-size:13px;color:var(--muted);background:rgba(255,255,255,0.01);padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.02);max-height:200px;overflow:auto}
+    footer{grid-column:1/-1;color:var(--muted);font-size:13px;text-align:right;margin-top:6px}
+    @media(max-width:900px){.wrap{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap" role="application" aria-label="オセロゲーム">
+    <header>
+      <h1>オセロ（リバーシ） - 単一HTMLファイル</h1>
+      <div class="muted">手番: <span id="turnLabel">黒</span></div>
+    </header>
+
+    <section class="board-area">
+      <div id="board" class="board" aria-label="オセロ盤"></div>
+    </section>
+
+    <aside class="side" aria-live="polite">
+      <div class="status">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="player"><div class="icon black">●</div><div>黒: <strong id="blackScore">2</strong></div></div>
+            <div style="width:12px"></div>
+            <div class="player"><div class="icon white">○</div><div>白: <strong id="whiteScore">2</strong></div></div>
+          </div>
+          <div class="muted" style="margin-top:6px">合法手は点で表示されます</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="undoBtn">Undo（手戻し）</button>
+        <button id="passBtn">パス（合法手なしの場合）</button>
+        <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="aiCheckbox"> 白をCPUでプレイ</label>
+        <button id="restartBtn" style="background:linear-gradient(180deg,#7c3aed,#4c1d95)">リスタート</button>
+      </div>
+
+      <div>
+        <strong>ログ</strong>
+        <div id="log" class="log">ゲームを開始しました。</div>
+      </div>
+    </aside>
+
+    <footer>自分と隣の人で対戦するか、白をCPUにして黒プレイヤーが操作できます。</footer>
+  </div>
+
+  <script>
+    // オセロ（リバーシ）単一ファイル実装
+    // 0 = 空, 1 = 黒, 2 = 白
+    const SIZE = 8;
+    const EMPTY = 0, BLACK = 1, WHITE = 2;
+    const DIRS = [
+      [-1,-1],[-1,0],[-1,1],
+      [0,-1],       [0,1],
+      [1,-1],[1,0],[1,1]
+    ];
+
+    // DOM
+    const boardEl = document.getElementById('board');
+    const turnLabel = document.getElementById('turnLabel');
+    const blackScoreEl = document.getElementById('blackScore');
+    const whiteScoreEl = document.getElementById('whiteScore');
+    const logEl = document.getElementById('log');
+    const undoBtn = document.getElementById('undoBtn');
+    const passBtn = document.getElementById('passBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const aiCheckbox = document.getElementById('aiCheckbox');
+
+    // ゲーム状態
+    let board = createEmptyBoard();
+    let currentPlayer = BLACK;
+    let history = []; // undo用に {board, currentPlayer}
+    let gameOver = false;
+
+    // 初期化
+    function resetGame() {
+      board = createEmptyBoard();
+      // 初期配置
+      board[3][3] = WHITE;
+      board[4][4] = WHITE;
+      board[3][4] = BLACK;
+      board[4][3] = BLACK;
+      currentPlayer = BLACK;
+      history = [];
+      gameOver = false;
+      appendLog("新しいゲームを開始しました。");
+      render();
+      maybeAiMove();
+    }
+
+    // ボード生成
+    function createEmptyBoard(){
+      const b = [];
+      for(let r=0;r<SIZE;r++){ b[r] = new Array(SIZE).fill(EMPTY); }
+      return b;
+    }
+
+    // 深いコピー
+    function copyBoard(b){
+      return b.map(row => row.slice());
+    }
+
+    // ボード描画
+    function render(){
+      boardEl.innerHTML = '';
+      const legal = getLegalMoves(currentPlayer);
+      for(let r=0;r<SIZE;r++){
+        for(let c=0;c<SIZE;c++){
+          const idx = r*SIZE + c;
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+          cell.dataset.r = r; cell.dataset.c = c;
+          cell.setAttribute('role','button');
+          cell.setAttribute('aria-label', `行 ${r+1} 列 ${c+1}`);
+          // 石描画
+          if(board[r][c] === BLACK){
+            const d = document.createElement('div'); d.className = 'disc black'; cell.appendChild(d);
+          } else if(board[r][c] === WHITE){
+            const d = document.createElement('div'); d.className = 'disc white'; cell.appendChild(d);
+          } else if(legal.has(key(r,c))){
+            // 合法手は小さな白いドットで表示（黒白両方見やすく）
+            const h = document.createElement('div'); h.className = 'hint'; cell.appendChild(h);
+          }
+          // クリック処理
+          cell.addEventListener('click', ()=> onCellClick(r,c));
+          boardEl.appendChild(cell);
+        }
+      }
+      updateStatus();
+    }
+
+    // 座標をキー文字列に
+    function key(r,c){ return r + ',' + c; }
+
+    // 合法手取得：Map key->flips(array of [r,c])
+    function getLegalMoves(player){
+      const opponent = (player === BLACK) ? WHITE : BLACK;
+      const moves = new Map();
+      for(let r=0;r<SIZE;r++){
+        for(let c=0;c<SIZE;c++){
+          if(board[r][c] !== EMPTY) continue;
+          const flips = [];
+          for(const d of DIRS){
+            let rr = r + d[0], cc = c + d[1];
+            const line = [];
+            let i = 1;
+            while(inBounds(rr,cc) && board[rr][cc] === opponent){
+              line.push([rr,cc]);
+              i++;
+              rr += d[0]; cc += d[1];
+            }
+            if(line.length > 0 && inBounds(rr,cc) && board[rr][cc] === player){
+              flips.push(...line);
+            }
+          }
+          if(flips.length > 0) moves.set(key(r,c), flips);
+        }
+      }
+      return moves;
+    }
+
+    function inBounds(r,c){ return r>=0 && r<SIZE && c>=0 && c<SIZE; }
+
+    // セルクリック時
+    function onCellClick(r,c){
+      if(gameOver) return;
+      const legal = getLegalMoves(currentPlayer);
+      const k = key(r,c);
+      if(!legal.has(k)){
+        appendLog("そのマスには打てません。");
+        return;
+      }
+      // 履歴に保存
+      history.push({board: copyBoard(board), currentPlayer});
+      makeMove(r,c, legal.get(k));
+      // 次の描画・AI対応
+      render();
+      maybeAiMove();
+    }
+
+    // 着手を反映
+    function makeMove(r,c, flips){
+      board[r][c] = currentPlayer;
+      for(const [rr,cc] of flips){ board[rr][cc] = currentPlayer; }
+      appendLog(`${currentPlayer===BLACK?'黒':'白'} が (${r+1},${c+1}) に着手。 ${flips.length} 枚反転。`);
+      // 手番交代
+      currentPlayer = (currentPlayer === BLACK) ? WHITE : BLACK;
+      // 終了判定 / 自動パス処理は render の後で実行される
+      checkEndOrAutoPass();
+    }
+
+    // パス / 手が無いときの処理
+    function checkEndOrAutoPass(){
+      const legalNext = getLegalMoves(currentPlayer);
+      if(legalNext.size === 0){
+        const legalCurrent = getLegalMoves(opponent(currentPlayer));
+        if(legalCurrent.size === 0){
+          // 両者打てない -> 終了
+          endGame();
+        } else {
+          // 自動パス
+          appendLog(`${currentPlayer===BLACK?'黒':'白'} は合法手がないためパス。`);
+          currentPlayer = opponent(currentPlayer);
+          // 連続パスの可能性もあるので再帰的にチェック
+          checkEndOrAutoPass();
+        }
+      }
+    }
+
+    function opponent(p){ return p===BLACK?WHITE:BLACK; }
+
+    // Undo（1手戻し）
+    undoBtn.addEventListener('click', ()=>{
+      if(history.length === 0){ appendLog("これ以上戻せません。"); return; }
+      const last = history.pop();
+      board = copyBoard(last.board);
+      currentPlayer = last.currentPlayer;
+      gameOver = false;
+      appendLog("1手戻しました。");
+      render();
+    });
+
+    // パスボタン（明示的）
+    passBtn.addEventListener('click', ()=>{
+      const legal = getLegalMoves(currentPlayer);
+      if(legal.size > 0){ appendLog("合法手があるためパスできません。"); return; }
+      history.push({board: copyBoard(board), currentPlayer});
+      appendLog(`${currentPlayer===BLACK?'黒':'白'} がパスしました。`);
+      currentPlayer = opponent(currentPlayer);
+      render();
+      maybeAiMove();
+    });
+
+    // リスタート
+    restartBtn.addEventListener('click', ()=>{
+      if(!confirm("新しいゲームを開始します。よろしいですか？")) return;
+      resetGame();
+    });
+
+    // AIチェック
+    aiCheckbox.addEventListener('change', ()=>{
+      appendLog(aiCheckbox.checked ? "白をCPUでプレイします。" : "白のCPUを解除しました。" );
+      maybeAiMove();
+    });
+
+    // 単純なAI：貪欲法（最大反転数を選ぶ）。引き分け時はランダム。
+    function aiPickMove(player){
+      const legal = getLegalMoves(player);
+      if(legal.size === 0) return null;
+      let best = [], bestNum = -1;
+      for(const [k, flips] of legal.entries()){
+        if(flips.length > bestNum){
+          bestNum = flips.length; best = [k];
+        } else if(flips.length === bestNum){
+          best.push(k);
+        }
+      }
+      // ランダムに1つ選ぶ
+      const pick = best[Math.floor(Math.random()*best.length)];
+      const [r,c] = pick.split(',').map(s=>parseInt(s));
+      return {r,c,flips: legal.get(pick)};
+    }
+
+    // AIの着手を遅延して行う（UIのため）
+    function maybeAiMove(){
+      if(gameOver) return;
+      // 白がCPUに設定されているなら白のターン時に打たせる
+      if(aiCheckbox.checked && currentPlayer === WHITE){
+        // 少し遅延して思考っぽく
+        setTimeout(()=>{
+          const move = aiPickMove(WHITE);
+          if(move === null){
+            // パス
+            history.push({board: copyBoard(board), currentPlayer});
+            appendLog("白（CPU）は合法手がなくパスしました。");
+            currentPlayer = BLACK;
+            render();
+            return;
+          }
+          history.push({board: copyBoard(board), currentPlayer});
+          makeMove(move.r, move.c, move.flips);
+          render();
+        }, 350);
+      } else {
+        // ただし手番が自分（人間）の場合、終了判定などは既に行われているので描画のみ
+        render();
+      }
+    }
+
+    // ゲーム終了処理
+    function endGame(){
+      gameOver = true;
+      const {black,white} = countScore();
+      let msg;
+      if(black > white) msg = `ゲーム終了 — 黒の勝ち! ${black} : ${white}`;
+      else if(white > black) msg = `ゲーム終了 — 白の勝ち! ${white} : ${black}`;
+      else msg = `ゲーム終了 — 引き分け ${black} : ${white}`;
+      appendLog(msg);
+      render();
+      alert(msg);
+    }
+
+    // スコア計算と表示更新
+    function countScore(){
+      let black=0, white=0;
+      for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++){
+        if(board[r][c] === BLACK) black++;
+        if(board[r][c] === WHITE) white++;
+      }
+      return {black,white};
+    }
+
+    function updateStatus(){
+      turnLabel.textContent = (currentPlayer===BLACK) ? '黒' : '白';
+      const s = countScore();
+      blackScoreEl.textContent = s.black;
+      whiteScoreEl.textContent = s.white;
+      // ボタン有効/無効
+      undoBtn.disabled = history.length === 0;
+      // パスボタンは合法手なしのときのみ有効
+      passBtn.disabled = getLegalMoves(currentPlayer).size > 0;
+    }
+
+    // ログ追記
+    function appendLog(text){
+      const time = new Date().toLocaleTimeString();
+      logEl.innerHTML = `<div>[${time}] ${escapeHtml(text)}</div>` + logEl.innerHTML;
+    }
+    function escapeHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    // 初期描画
+    resetGame();
+
+    // キーボード操作（U: Undo, R: Restart, P: Pass, Space: パスは使わないがSpaceでパス判定行う）
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'u' || e.key === 'U') { undoBtn.click(); }
+      if(e.key === 'r' || e.key === 'R') { restartBtn.click(); }
+      if(e.key === 'p' || e.key === 'P' || e.code === 'Space') { passBtn.click(); }
+    });
+
+    // 盤面と合法手の整合性を再チェックして終了状態を把握（外部からの呼び出しが必要な場合に備えた関数）
+    function refresh(){
+      render();
+      checkEndOrAutoPass();
+    }
+    // Expose for debugging (optional)
+    window.OTHELLO = {board, resetGame, refresh, getLegalMoves, copyBoard};
+  </script>
+</body>
+</html>
